@@ -26,8 +26,6 @@ App.prototype.init = function(){
   });
 
   $('#roomselect').on('click', function(e){
-    debugger;
-    console.log('roomselect was selected');
     that.clearMessages();
     _.each(that.messages[$(this).val()], function(message){
       that.addMessage(message);
@@ -66,7 +64,7 @@ App.prototype.fetch = function() {
         if(!that.messages[message.roomname]){
           that.messages[message.roomname] = [];
         }
-        that.messages[message.roomname].push(message.text);
+        that.messages[message.roomname].push(message);
 
         that.addMessage(message);
 
@@ -111,10 +109,11 @@ App.prototype.addRoom = function(room){
       return;
     }
   });
+
   
   if(unique){
     var $room = $('<option>' + room + '</option>');
-    $('#roomSelect').append($room);
+    $('#roomselect').append($room);
   }
 }
 
