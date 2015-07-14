@@ -3,6 +3,7 @@
 var App = function(){
   this.friends = [];
   this.rooms = [];
+  this.room = '';
   this.messages = {};
 }
 App.prototype.constructor = App;
