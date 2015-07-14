@@ -25,6 +25,15 @@ App.prototype.init = function(){
     $('#roomname').val('');
   });
 
+  $('#roomselect').on('click', function(e){
+    debugger;
+    console.log('roomselect was selected');
+    that.clearMessages();
+    _.each(that.messages[$(this).val()], function(message){
+      that.addMessage(message);
+    });
+  }); 
+
   this.fetch();
 }
 
@@ -51,7 +60,6 @@ App.prototype.fetch = function() {
     success: function(data){
       console.log(data);
       _.each(data.results, function(message, index){
-        //Check for new rooms
         that.addRoom(message.roomname);
 
         //Organize new messages by room
@@ -60,7 +68,6 @@ App.prototype.fetch = function() {
         }
         that.messages[message.roomname].push(message.text);
 
-        //Add messages depending on the value of the chatroom selector
         that.addMessage(message);
 
       }); 
