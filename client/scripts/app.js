@@ -39,6 +39,10 @@ App.prototype.init = function(){
   }); 
 
   this.fetch();
+  setInterval(function(){
+    that.clearMessages();
+    that.fetch();
+  }, 5000);
 }
 
 App.prototype.send = function(message){
@@ -62,7 +66,6 @@ App.prototype.fetch = function() {
   $.ajax({
     url: 'https://api.parse.com/1/classes/chatterbox',
     success: function(data){
-      console.log(data);
       _.each(data.results, function(message, index){
         that.addRoom(message.roomname);
 
@@ -99,8 +102,18 @@ App.prototype.addMessage = function(message){
     $message.text(message.text);
     $messageDiv.append($user);
     $messageDiv.append($message);
-    $chats.append($messageDiv);
-    $('#main').append($chats);
+
+    if(this.room !== ''){
+      if(message.roomname === this.room){
+        $chats.append($messageDiv);
+        $('#main').append($chats);
+      }
+    }
+
+    if(this.room === ''){
+      $chats.append($messageDiv);
+      $('#main').append($chats);
+    }
 
 }
 
