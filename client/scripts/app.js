@@ -5,10 +5,14 @@ var App = function(){
   this.rooms = [];
   this.room = '';
   this.messages = {};
+  this.username = '';
 }
 App.prototype.constructor = App;
 
 App.prototype.init = function(){
+  //Username is from 10th char to end
+  this.username = window.location.search.substring(10);
+
   var that = this;
   $('.username').on("click", function(e){
     that.addFriend($(e.target).text());
@@ -128,7 +132,11 @@ App.prototype.addFriend = function(friend){
   }
 }
 
-App.prototype.handleSubmit = function(message){
+App.prototype.handleSubmit = function(text){
+  var message = {};
+  message.text = text;
+  message.username = this.username;
+  message.roomname = this.roomname;
   this.send(message);
 }
 
