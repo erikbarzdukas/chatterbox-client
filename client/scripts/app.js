@@ -92,7 +92,9 @@ App.prototype.addMessage = function(message){
 
 App.prototype.addRoom = function(room){
   var unique = true;
-
+  if(room === undefined || room === null || room === ''){
+    return
+  }
   if(this.rooms.indexOf(room) === -1) {
     this.rooms.push(room);
   }
