@@ -87,6 +87,9 @@ App.prototype.addMessage = function(message){
     if($chats.length < 1){
       $chats = $('<div id="chats"></div>');
     }
+    if(this.friends.indexOf(message.username) !== -1){
+      $message.attr('font-weight', 'bold');
+    }
 
     $user.text(message.username);
     $message.text(message.text);
