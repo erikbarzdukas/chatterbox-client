@@ -39,20 +39,23 @@ App.prototype.send = function(message){
 }
 
 App.prototype.fetch = function() {
+  var that = this;
+
   $.ajax({
+    url: 'https://api.parse.com/1/classes/chatterbox',
     success: function(data){
-      _.each(function(message, index){
+      _.each(data.results, function(message, index){
         //Check for new rooms
-        this.addRoom(message.room);
+        that.addRoom(message.room);
 
         //Organize new messages by room
-        if(!this.messages[message.room]){
-          this.messages[message.room] = [];
+        if(!that.messages[message.room]){
+          that.messages[message.room] = [];
         }
-        this.messages[message.room].push(message);
+        that.messages[message.room].push(message);
 
         //Add messages depending on the value of the chatroom selector
-        this.addMessage(message);
+        that.addMessage(message);
 
       }); 
     }
@@ -88,7 +91,7 @@ App.prototype.addRoom = function(room){
     this.rooms.push(room);
   }
   $('option').each(function(){
-    if(this.val() === room){
+    if($(this).val() === room){
       unique = false;
       return;
     }
