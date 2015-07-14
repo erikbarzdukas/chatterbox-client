@@ -13,11 +13,16 @@ App.prototype.init = function(){
     that.addFriend($(e.target).text());
   });
 
-  $('form').on("submit", function(e){
-    console.log('Event listener heard submit');
+  $('#send').on("submit", function(e){
     e.preventDefault();
     that.handleSubmit($('#message').val());
     $('#message').val('');
+  });
+
+  $('#newroom').on('submit', function(e){
+    e.preventDefault();
+    that.addRoom($('#roomname').val());
+    $('#roomname').val('');
   });
 
   this.fetch();
