@@ -44,15 +44,16 @@ App.prototype.fetch = function() {
   $.ajax({
     url: 'https://api.parse.com/1/classes/chatterbox',
     success: function(data){
+      console.log(data);
       _.each(data.results, function(message, index){
         //Check for new rooms
-        that.addRoom(message.room);
+        that.addRoom(message.roomname);
 
         //Organize new messages by room
-        if(!that.messages[message.room]){
-          that.messages[message.room] = [];
+        if(!that.messages[message.roomname]){
+          that.messages[message.roomname] = [];
         }
-        that.messages[message.room].push(message);
+        that.messages[message.roomname].push(message.text);
 
         //Add messages depending on the value of the chatroom selector
         that.addMessage(message);
@@ -75,7 +76,7 @@ App.prototype.addMessage = function(message){
       $chats = $('<div id="chats"></div>');
     }
 
-    $user.text(message.user);
+    $user.text(message.username);
     $message.text(message.text);
     $messageDiv.append($user);
     $messageDiv.append($message);
