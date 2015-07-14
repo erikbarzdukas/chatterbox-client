@@ -2,6 +2,8 @@
 
 var App = function(){
   this.friends = [];
+  this.rooms = [];
+  this.messages = {};
 }
 App.prototype.constructor = App;
 
@@ -17,6 +19,8 @@ App.prototype.init = function(){
     that.handleSubmit($('#message').val());
     $('#message').val('');
   });
+
+  this.fetch();
 }
 
 App.prototype.send = function(message){
@@ -37,9 +41,22 @@ App.prototype.send = function(message){
 App.prototype.fetch = function() {
   $.ajax({
     success: function(data){
-     console.log('chatterbox: Sent message');
-    } 
-  });
+      _.each(function(message, index){
+        //Check for new rooms
+        this.addRoom(message.room);
+
+        //Organize new messages by room
+        if(!this.messages[message.room]){
+          this.messages[message.room] = [];
+        }
+        this.messages[message.room].push(message);
+
+        //Add messages depending on the value of the chatroom selector
+        this.addMessage(message);
+
+      }); 
+    }
+ });
 }
 
 App.prototype.clearMessages = function(){
@@ -47,9 +64,6 @@ App.prototype.clearMessages = function(){
 }
 
 App.prototype.addMessage = function(message){
-    var safeText = document.createTextNode(message.text);
-    var safeUser = document.createTextNode(message.username);
-    var safeRoom = document.createTextNode(message.roomname);
     var $messageDiv = $('<div></div>');
     var $user = $('<b class="username"></b>');
     var $message = $('<p></p>');
@@ -58,8 +72,8 @@ App.prototype.addMessage = function(message){
       $chats = $('<div id="chats"></div>');
     }
 
-    $user.append(safeUser);
-    $message.append(safeText);
+    $user.text(message.user);
+    $message.text(message.text);
     $messageDiv.append($user);
     $messageDiv.append($message);
     $chats.append($messageDiv);
@@ -68,11 +82,28 @@ App.prototype.addMessage = function(message){
 }
 
 App.prototype.addRoom = function(room){
-  var $room = $('<option>' + room + '</option>');
-  $('#roomSelect').append($room);
+  var unique = true;
+
+  if(this.rooms.indexOf(room) === -1) {
+    this.rooms.push(room);
+  }
+  $('option').each(function(){
+    if(this.val() === room){
+      unique = false;
+      return;
+    }
+  });
+  
+  if(unique){
+    var $room = $('<option>' + room + '</option>');
+    $('#roomSelect').append($room);
+  }
 }
 
-App.prototype.addFriend = function(){
+App.prototype.addFriend = function(friend){
+  if(this.friends.indexOf(friend) === -1){
+    this.friends.push(friend);
+  }
 }
 
 App.prototype.handleSubmit = function(message){
@@ -80,5 +111,7 @@ App.prototype.handleSubmit = function(message){
 }
 
 var app = new App();
-
+$(document).ready(function(){
+  app.init();
+});
 
