@@ -28,6 +28,7 @@ App.prototype.init = function(){
 
   $('#roomselect').on('click', function(e){
     that.clearMessages();
+    that.room = $(this).val();
     _.each(that.messages[$(this).val()], function(message){
       that.addMessage(message);
     });
